@@ -139,10 +139,13 @@ public class ImageController {
         if(image.getUser().getId()!=user.getId()) {
         	String error ="Only the owner of the image can edit the image";
         	model.addAttribute("editError", error);
-        	
+            List<Comment> comments = commentService.getAllComments(imageId);
+            model.addAttribute("comments", comments);
+            model.addAttribute("image", image);
+            model.addAttribute("tags", image.getTags());            
+            return "images/image";      	
 
-        	return "redirect:/images/" + updatedImage.getId() + "/" + updatedImage.getTitle();
-        }else {
+          }else {
         	updatedImage.setUser(user);
         	updatedImage.setTags(imageTags);
         	updatedImage.setDate(new Date());
