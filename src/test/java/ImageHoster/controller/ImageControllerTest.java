@@ -4,6 +4,7 @@ package ImageHoster.controller;
 import ImageHoster.model.Image;
 import ImageHoster.model.Tag;
 import ImageHoster.model.User;
+import ImageHoster.model.Comment;
 import ImageHoster.model.UserProfile;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.TagService;
@@ -20,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -214,14 +216,14 @@ public class ImageControllerTest {
 
         User user1 = new User();
         UserProfile userProfile1 = new UserProfile();
-        userProfile.setId(2);
-        userProfile.setEmailAddress("p@gmail.com");
-        userProfile.setFullName("Prerna");
-        userProfile.setMobileNumber("9876543210");
-        user.setProfile(userProfile1);
-        user.setId(2);
-        user.setUsername("Prerna");
-        user.setPassword("password1@@");
+        userProfile1.setId(2);
+        userProfile1.setEmailAddress("p@gmail.com");
+        userProfile1.setFullName("Prerna");
+        userProfile1.setMobileNumber("9876543210");
+        user1.setProfile(userProfile1);
+        user1.setId(2);
+        user1.setUsername("Prerna");
+        user1.setPassword("password1@@");
 
         Image image = new Image();
         image.setId(1);
@@ -236,14 +238,14 @@ public class ImageControllerTest {
         List<Tag> tags = new ArrayList<>();
         tags.add(tag);
         image.setTags(tags);
+        
 
         Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
 
         this.mockMvc.perform(get("/editImage")
                 .param("imageId", "1")
                 .session(session))
-                //.andExpect(model().attribute("editError", "Only the owner of the image can edit the image"));
-        		.andExpect(content().string(containsString("Edit Image")));
+                .andExpect(model().attribute("editError", "Only the owner of the image can edit the image"));
     }
 
     //This test checks the controller logic when the owner of the image sends the DELETE request to delete the image and checks whether the logic returns the html file 'images.html'
@@ -297,14 +299,14 @@ public class ImageControllerTest {
 
         User user1 = new User();
         UserProfile userProfile1 = new UserProfile();
-        userProfile.setId(2);
-        userProfile.setEmailAddress("p@gmail.com");
-        userProfile.setFullName("Prerna");
-        userProfile.setMobileNumber("9876543210");
-        user.setProfile(userProfile1);
-        user.setId(2);
-        user.setUsername("Prerna");
-        user.setPassword("password1@@");
+        userProfile1.setId(2);
+        userProfile1.setEmailAddress("p@gmail.com");
+        userProfile1.setFullName("Prerna");
+        userProfile1.setMobileNumber("9876543210");
+        user1.setProfile(userProfile1);
+        user1.setId(2);
+        user1.setUsername("Prerna");
+        user1.setPassword("password1@@");
 
         Image image = new Image();
         image.setId(1);
@@ -315,12 +317,12 @@ public class ImageControllerTest {
 
         Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
 
+
         this.mockMvc.perform(delete("/deleteImage")
                 .param("imageId", "1")
                 .session(session))
-        .andExpect(redirectedUrl("/images/1/new"));       
-        // .andExpect(model().attribute("deleteError", "Only the owner of the image can delete the image"));
-    }
+                .andExpect(model().attribute("deleteError", "Only the owner of the image can delete the image"));    
+     }
 }
 
 
