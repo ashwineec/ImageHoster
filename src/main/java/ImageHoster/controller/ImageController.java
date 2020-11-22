@@ -162,10 +162,16 @@ public class ImageController {
     public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId, HttpSession session, Model model) {
     	Image image = imageService.getImage(imageId);
     	User user = (User) session.getAttribute("loggeduser");
-    	String error ="Only the owner of the image can delete the image";
+    	
         if(image.getUser().getId()!=user.getId()) {
+        	String error ="Only the owner of the image can delete the image";
         	model.addAttribute("deleteError", error);
-        	return "redirect:/images/" + image.getId() + "/" + image.getTitle(); 
+            List<Comment> comments = commentService.getAllComments(imageId);
+            model.addAttribute("comments", comments);
+            model.addAttribute("image", image);
+            model.addAttribute("tags", image.getTags());            
+            return "images/image";      	
+       	
         }
     	imageService.deleteImage(imageId);
         return "redirect:/images";
